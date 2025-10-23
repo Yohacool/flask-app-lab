@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Greeting Page{% endblock %}
+
+{% block content %}
+
+    <nav>
+        <ul>
+            <li>
+                <a href="{{ url_for('users.greetings', name = 'John', age=30)}}">Greet John</a>
+            </li>
+            <li>
+                <a href="{{ url_for('users.admin')}}">Admin</a>
+            </li>
+        </ul>
+    </nav>
+
+    <h1>Hello, <span class="name">{{name}}</span>!</h2>
+    {% if age %}
+        <p class="age {% if name == 'ADMINISTRATOR' %}admin{% elif name == 'JOHN' %}john{% endif %}">You are {{ age }} years old.</p>
+    {% else %}
+        <p>Age is unknown.</p>
+    {% endif %}
+{% endblock %}
