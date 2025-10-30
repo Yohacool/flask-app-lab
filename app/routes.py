@@ -33,7 +33,8 @@ def profile():
         return redirect(url_for("login"))
     user = session["user"]
     cookies = request.cookies.items()
-    return render_template("profile.html", user=user, cookies=cookies)
+    theme = request.cookies.get("theme", "light")
+    return render_template("profile.html", user=user, cookies=cookies, theme=theme)
 
 @app.route("/logout")
 def logout():
@@ -61,7 +62,6 @@ def add_cookie():
         flash("Введіть ключ і значення!", "danger")
     return resp
 
-
 @app.route("/delete_cookie/<key>")
 def delete_cookie(key):
     resp = make_response(redirect(url_for("profile")))
@@ -69,11 +69,21 @@ def delete_cookie(key):
     flash(f"Кукі '{key}' видалено!", "info")
     return resp
 
-
 @app.route("/delete_all_cookies")
 def delete_all_cookies():
     resp = make_response(redirect(url_for("profile")))
     for key in request.cookies.keys():
         resp.delete_cookie(key)
     flash("Усі кукі видалено!", "info")
+    return resp
+
+@app.route("/set_theme/<color>")
+def set_theme(color):
+    if color not in ["light", "dark"]:
+        flash("Невідома тема!", "warning")
+        return redirect(url_for("profile"))
+
+    resp = make_response(redirect(url_for("profile")))
+    resp.set_cookie("theme", color, max_age=3600 * 24 * 7)
+    flash(f"Тема змінена на {color}.", "success")
     return resp
