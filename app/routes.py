@@ -32,7 +32,8 @@ def profile():
         flash("Ви не авторизовані! Увійдіть у систему.", "warning")
         return redirect(url_for("login"))
     user = session["user"]
-    return render_template("profile.html", user=user)
+    cookies = request.cookies.items()
+    return render_template("profile.html", user=user, cookies=cookies)
 
 @app.route("/logout")
 def logout():
@@ -47,3 +48,32 @@ def resume():
 @app.route('/contacts')
 def contacts():
     return render_template('contacts.html')
+
+@app.route("/add_cookie", methods=["POST"])
+def add_cookie():
+    key = request.form.get("key")
+    value = request.form.get("value")
+    resp = make_response(redirect(url_for("profile")))
+    if key and value:
+        resp.set_cookie(key, value, max_age=3600)
+        flash(f"Кукі '{key}' додано!", "success")
+    else:
+        flash("Введіть ключ і значення!", "danger")
+    return resp
+
+
+@app.route("/delete_cookie/<key>")
+def delete_cookie(key):
+    resp = make_response(redirect(url_for("profile")))
+    resp.delete_cookie(key)
+    flash(f"Кукі '{key}' видалено!", "info")
+    return resp
+
+
+@app.route("/delete_all_cookies")
+def delete_all_cookies():
+    resp = make_response(redirect(url_for("profile")))
+    for key in request.cookies.keys():
+        resp.delete_cookie(key)
+    flash("Усі кукі видалено!", "info")
+    return resp

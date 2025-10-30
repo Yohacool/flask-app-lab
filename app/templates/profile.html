@@ -2,4 +2,25 @@
 {% block content %}
 <h2>Вітаю, {{ user }}!</h2>
 
+<h3>Кукі користувача</h3>
+<table border="1">
+  <tr><th>Ключ</th><th>Значення</th><th>Дія</th></tr>
+  {% for key, val in cookies %}
+  <tr>
+    <td>{{ key }}</td>
+    <td>{{ val }}</td>
+    <td><a href="{{ url_for('delete_cookie', key=key) }}">Видалити</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+<form method="POST" action="{{ url_for('add_cookie') }}">
+  <h4>Додати кукі</h4>
+  <input type="text" name="key" placeholder="Ключ">
+  <input type="text" name="value" placeholder="Значення">
+  <button type="submit">Додати</button>
+</form>
+
+<a href="{{ url_for('delete_all_cookies') }}">Видалити всі кукі</a>
+</body>
 {% endblock %}
