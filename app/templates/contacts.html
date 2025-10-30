@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Контакти</h1>
+
+<section>
+  <p>Звертайтеся до мене Ярослав</p>
+  <p>Мій емейл: yaroslav.khodak.23@pnu.edu.ua</p>
+  <p>Мій номер телефону: -380123456789</p>
+</section>
+
+<form>
+  <div class="mb-3">
+    <label for="name" class="form-label">Ім'я</label>
+    <input type="text" class="form-control" id="name" placeholder="Ваше ім'я">
+  </div>
+  <div class="mb-3">
+    <label for="message" class="form-label">Повідомлення</label>
+    <textarea class="form-control" id="message" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Відправити</button>
+</form>
+{% endblock %}
