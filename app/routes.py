@@ -1,5 +1,18 @@
-from flask import request, redirect, url_for, render_template, abort, flash, session, make_response
+from flask import request, redirect, url_for, render_template, flash, session, make_response
+from .forms import ContactForm
 from . import app
+import logging
+import os
+
+LOG_PATH = os.path.join(os.path.dirname(__file__), "contacts.log")
+contact_logger = logging.getLogger("contact_logger")
+contact_logger.setLevel(logging.INFO)
+if not contact_logger.handlers:
+    handler = logging.FileHandler(LOG_PATH, encoding="utf-8")
+    formatter = logging.Formatter("%(asctime)s - %(message)s")
+    handler.setFormatter(formatter)
+    contact_logger.addHandler(handler)
+contact_logger.propagate = False
 
 @app.route('/')
 def main():
@@ -46,9 +59,21 @@ def logout():
 def resume():
     return render_template('resume.html')
 
-@app.route('/contacts')
+@app.route("/contacts", methods=["GET", "POST"])
 def contacts():
-    return render_template('contacts.html')
+    form = ContactForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        phone = form.phone.data
+        subject = form.subject.data
+        message = form.message.data
+        contact_logger.info(f"Від {name} ({email}, {phone}), тема: {subject} — {message}")
+        flash(f"Дякуємо, {name}! Ваше повідомлення успішно надіслано.", "success")
+        return redirect(url_for("contacts"))
+    elif form.is_submitted():
+        flash("Форма заповнена некоректно. Перевірте введені дані.", "danger")
+    return render_template("contacts.html", form=form)
 
 @app.route("/add_cookie", methods=["POST"])
 def add_cookie():
