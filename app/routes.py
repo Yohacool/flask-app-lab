@@ -1,5 +1,6 @@
 from flask import request, redirect, url_for, render_template, flash, session, make_response
 from .forms import ContactForm
+from .forms import LoginForm
 from . import app
 import logging
 import os
@@ -26,18 +27,19 @@ def home():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-
-        if username == "jar" and password == "123":
-            session["user"] = username
-            flash("Вхід виконано успішно!", "success")
-            return redirect(url_for("profile"))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = form.user.data
+        password = form.password.data
+        remember = form.remember.data
+        if user == "jar" and password == "1234":
+            session['user'] = user
+            flash(f"Вітаємо, {user}! {'(Запам’ятати: Так)' if remember else '(Запам’ятати: Ні)'}", "success")
+            return redirect(url_for('profile'))
         else:
-            flash("Невірний логін або пароль!", "danger")
-            return redirect(url_for("login"))
-    return render_template("login.html")
+            flash("Невірні дані для входу. Спробуйте ще раз.", "danger")
+            return redirect(url_for('login'))
+    return render_template('login.html', form=form)
 
 @app.route("/profile")
 def profile():
@@ -47,7 +49,7 @@ def profile():
     user = session["user"]
     cookies = request.cookies.items()
     theme = request.cookies.get("theme", "light")
-    return render_template("profile.html", user=user, cookies=cookies, theme=theme)
+    return render_template("profile.html", user=session['user'], cookies=cookies, theme=theme)
 
 @app.route("/logout")
 def logout():
