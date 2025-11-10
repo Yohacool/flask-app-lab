@@ -1,4 +1,4 @@
-:root{
+:root {
   --bg: #fafafa;
   --card: #ffffff;
   --text: #222;
@@ -8,10 +8,20 @@
   --danger: #dc3545;
   --warning: #ffc107;
   --info: #0dcaf0;
+  --input-bg: #fff;
+  --input-border: #dcdcdc;
+  --input-focus: #0d6efd;
 }
 
 * { box-sizing: border-box; }
-html,body { height:100%; margin:0; padding:0; font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--text);}
+html,body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
 
 .container {
   max-width: 980px;
@@ -36,7 +46,14 @@ nav {
 nav a { color:var(--accent); text-decoration:none; font-weight:600; }
 nav a:hover { text-decoration:underline; }
 
-.flashes { list-style:none; padding:0; margin:8px 0 16px 0; display:flex; flex-direction:column; gap:8px; }
+.flashes {
+  list-style:none;
+  padding:0;
+  margin:8px 0 16px 0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
 .flash {
   padding:10px 12px;
   border-radius:8px;
@@ -50,11 +67,6 @@ nav a:hover { text-decoration:underline; }
 
 h1 { margin:0 0 10px 0; font-size:1.6rem; color:var(--text); }
 h2 { margin:0 0 8px 0; font-size:1.25rem; }
-
-.form-row { display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap; }
-.form-row input[type="text"]{ padding:8px 10px; border-radius:8px; border:1px solid #e6e6e6; min-width:160px; }
-.form-row button{ padding:8px 12px; border-radius:8px; background:var(--accent); color:white; border:none; cursor:pointer; font-weight:600; }
-.form-row button:hover{ filter:brightness(.95); }
 
 .table {
   width:100%;
@@ -74,7 +86,6 @@ h2 { margin:0 0 8px 0; font-size:1.25rem; }
   overflow:hidden;
   text-overflow:ellipsis;
 }
-
 .table th.key, .table td.key { width: 20%; max-width:160px; }
 .table th.value, .table td.value { width: 60%; min-width: 220px; }
 .table th.actions, .table td.actions { width: 20%; text-align:center; }
@@ -96,6 +107,75 @@ h2 { margin:0 0 8px 0; font-size:1.25rem; }
 }
 .btn-link:hover { text-decoration:underline; }
 
+form {
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--card);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+form label {
+  font-weight: 600;
+  color: var(--text);
+  display: block;
+  margin-bottom: 4px;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form textarea,
+form select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.2);
+}
+
+form .form-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+form .form-error {
+  color: var(--danger);
+  font-size: 0.9em;
+}
+
+form button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+form button:hover {
+  background-color: #0b5ed7;
+}
+
 body.dark {
   --bg: #0f1724;
   --card: #0b1220;
@@ -106,50 +186,27 @@ body.dark {
   --danger: #ff6b6b;
   --warning: #f6c24a;
   --info: #2dd4bf;
+  --input-bg: #10192e;
+  --input-border: #2a3446;
+  --input-focus: #60a5fa;
 }
-body.dark .card { box-shadow: 0 6px 20px rgba(0,0,0,0.6); }
-body.dark .table th, body.dark .table td { border-bottom:1px solid rgba(255,255,255,0.03); }
+
+body.dark form {
+  background: var(--card);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+}
+
+body.dark input,
+body.dark textarea,
+body.dark select {
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--input-border);
+}
 
 @media (max-width: 720px) {
   .container { padding:12px; margin: 18px auto; }
   .form-row { flex-direction:column; align-items:stretch; }
   .table th, .table td { font-size:0.95rem; padding:8px; }
   .table th.key, .table td.key { display:none; }
-}
-.hello {
-  font-weight: bold;
-}
-
-.name {
-  font-weight: bold;
-  color: #1a73e8;
-}
-
-.age {
-  font-size: 1.2em;
-}
-
-.age.admin {
-  color: green;
-}
-
-.age.john {
-  color: red;
-}
-form {
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-form label {
-  font-weight: 500;
-}
-
-form button {
-  background-color: #c9cec7;
-  border: none;
-}
-
-form button:hover {
-  background-color: #868693;
 }
